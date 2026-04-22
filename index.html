@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D&D Token Maker</title>
+<style>
+  :root {
+    --bg: #FDF1DC;
+    --panel: #f8e8cd;
+    --panel-2: #f3dfbe;
+    --text: #000000;
+    --muted: #4a342c;
+    --header: #58180D;
+    --accent: #7a2a18;
+    --border: #d7b98f;
+    --shadow: 0 10px 24px rgba(88, 24, 13, 0.10);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Bookmania", Georgia, "Times New Roman", serif;
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  .page {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 32px 20px 48px;
+  }
+
+  .header {
+    margin-bottom: 24px;
+  }
+
+  .title {
+    margin: 0 0 8px;
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--header);
+    font-family: "Mr Eaves", "Bookmania", Georgia, serif;
+  }
+
+  .subtitle {
+    margin: 0;
+    color: var(--text);
+    line-height: 1.5;
+    font-family: "Bookmania", Georgia, serif;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .controls {
+    padding: 20px;
+    display: grid;
+    gap: 18px;
+  }
+
+  .section-title {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--header);
+    font-family: "Mr Eaves", "Bookmania", Georgia, serif;
+  }
+
+  .hint {
+    margin: -6px 0 0;
+    color: var(--text);
+    font-size: 0.95rem;
+    line-height: 1.45;
+    font-family: "Bookmania", Georgia, serif;
+  }
+
+  .file-wrap {
+    display: grid;
+    gap: 10px;
+  }
+
+  .file-label {
+    font-size: 0.92rem;
+    color: var(--header);
+    font-family: "Mr Eaves", "Bookmania", Georgia, serif;
+  }
+
+  input[type="file"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: #fff8ee;
+    color: var(--text);
+    font-family: "Bookmania", Georgia, serif;
+  }
+
+  .control-group {
+    display: grid;
+    gap: 8px;
+  }
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .row label {
+    font-size: 0.95rem;
+    color: var(--text);
+    font-family: "Bookmania", Georgia, serif;
+  }
+
+  .value-pill {
+    min-width: 56px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    text-align: center;
+    background: #fff8ee;
+    border: 1px solid var(--border);
+    color: var(--header);
+    font-size: 0.85rem;
+    font-family: "Bookmania", Georgia, serif;
+  }
+
+  input[type="range"] {
+    width: 100%;
+    accent-color: var(--accent);
+  }
+
+  .buttons {
+    display: grid;
+    gap: 10px;
+  }
+
+  button {
+    appearance: none;
+    border: none;
+    border-radius: 14px;
+    padding: 12px 14px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.08s ease, background 0.2s ease;
+    font-family: "Mr Eaves", "Bookmania", Georgia, serif;
+  }
+
+  button:hover {
+    transform: translateY(-1px);
+  }
+
+  button:active {
+    transform: translateY(0);
+  }
+
+  .primary {
+    background: var(--header);
+    color: #FDF1DC;
+  }
+
+  .secondary {
+    background: #fff8ee;
+    color: var(--header);
+    border: 1px solid var(--border);
+  }
+
+  .preview-panel {
+    padding: 20px;
+    display: grid;
+    gap: 14px;
+  }
+
+  .preview-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .preview-title {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--header);
+    font-family: "Mr Eaves", "Bookmania", Georgia, serif;
+  }
+
+  .preview-note {
+    color: var(--text);
+    font-size: 0.9rem;
+    font-family: "Bookmania", Georgia, serif;
+  }
+
+  .canvas-wrap {
+    display: grid;
+    place-items: center;
+    border-radius: 18px;
+    background:
+      linear-gradient(45deg, #ead6b4 25%, transparent 25%),
+      linear-gradient(-45deg, #ead6b4 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #ead6b4 75%),
+      linear-gradient(-45deg, transparent 75%, #ead6b4 75%);
+    background-size: 24px 24px;
+    background-position: 0 0, 0 12px, 12px -12px, -12px 0;
+    padding: 18px;
+    border: 1px solid var(--border);
+  }
+
+  canvas {
+    display: block;
+    width: 300px;
+    height: 300px;
+    background: transparent;
+    border-radius: 14px;
+    cursor: grab;
+    image-rendering: auto;
+  }
+
+  canvas.dragging {
+    cursor: grabbing;
+  }
+
+  .footer-help {
+    color: var(--text);
+    font-size: 0.92rem;
+    line-height: 1.5;
+    font-family: "Bookmania", Georgia, serif;
+  }
+
+  @media (max-width: 900px) {
+    .layout {
+      grid-template-columns: 1fr;
+    }
+
+    .page {
+      padding: 20px 14px 32px;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <h1 class="title">D&D Token Maker</h1>
+    <p class="subtitle">
+      Upload a portrait, drag it into place, zoom with the mouse wheel, and export a token PNG.
+    </p>
+  </div>
+
+  <div class="layout">
+    <aside class="panel controls">
+      <h2 class="section-title">Controls</h2>
+      <p class="hint">
+        Drag directly on the preview to move the portrait. Use the mouse wheel over the token to zoom in and out.
+      </p>
+
+      <div class="file-wrap">
+        <span class="file-label">Portrait image</span>
+        <input type="file" id="fileInput" accept="image/*">
+      </div>
+
+      <div class="control-group">
+        <div class="row">
+          <label for="breakoutY">Breakout limit</label>
+          <div class="value-pill" id="breakoutValue">95px</div>
+        </div>
+        <input type="range" id="breakoutY" min="0" max="180" step="1" value="95">
+      </div>
+
+      <div class="buttons">
+        <button id="resetBtn" class="secondary" type="button">Reset Position</button>
+        <button id="downloadBtn" class="primary" type="button">Download PNG</button>
+      </div>
+
+      <p class="footer-help">
+        The portrait is clipped to a centered 210×210 inner circle. The top part above the breakout limit is allowed to sit above the frame.
+      </p>
+    </aside>
+
+    <section class="panel preview-panel">
+      <div class="preview-top">
+        <h2 class="preview-title">Preview</h2>
+        <div class="preview-note">Drag to move · Wheel to zoom</div>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="canvas" width="300" height="300"></canvas>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+const fileInput = document.getElementById("fileInput");
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+const breakoutInput = document.getElementById("breakoutY");
+const breakoutValue = document.getElementById("breakoutValue");
+const resetBtn = document.getElementById("resetBtn");
+const downloadBtn = document.getElementById("downloadBtn");
+
+const tokenFrame = new Image();
+tokenFrame.crossOrigin = "anonymous";
+tokenFrame.src = "assets/token.png";
+
+const CANVAS_SIZE = 300;
+const TOKEN_SIZE = 256;
+const TOKEN_X = (CANVAS_SIZE - TOKEN_SIZE) / 2; // 22
+const TOKEN_Y = (CANVAS_SIZE - TOKEN_SIZE) / 2; // 22
+
+const TOKEN = {
+  cx: 150,
+  cy: 150,
+  radius: 105 // 210 / 2
+};
+
+const state = {
+  image: null,
+  scale: 1,
+  offsetX: 0,
+  offsetY: 0,
+  breakoutY: 95
+};
+
+const interaction = {
+  dragging: false,
+  lastX: 0,
+  lastY: 0
+};
+
+fileInput.addEventListener("change", handleUpload);
+breakoutInput.addEventListener("input", () => {
+  state.breakoutY = parseInt(breakoutInput.value, 10);
+  breakoutValue.textContent = `${state.breakoutY}px`;
+  draw();
+});
+
+resetBtn.addEventListener("click", resetView);
+downloadBtn.addEventListener("click", downloadPNG);
+
+canvas.addEventListener("mousedown", startDrag);
+window.addEventListener("mousemove", onDrag);
+window.addEventListener("mouseup", endDrag);
+canvas.addEventListener("wheel", onWheel, { passive: false });
+
+tokenFrame.onload = draw;
+breakoutValue.textContent = `${state.breakoutY}px`;
+
+function handleUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const url = URL.createObjectURL(file);
+  const img = new Image();
+
+  img.onload = () => {
+    state.image = img;
+    fitImageToCanvas();
+    draw();
+    URL.revokeObjectURL(url);
+  };
+
+  img.src = url;
+}
+
+function fitImageToCanvas() {
+  if (!state.image) return;
+
+  const img = state.image;
+  const targetSize = 240;
+  const maxDim = Math.max(img.width, img.height);
+
+  state.scale = targetSize / maxDim;
+  state.offsetX = 0;
+  state.offsetY = 0;
+}
+
+function resetView() {
+  if (!state.image) return;
+  fitImageToCanvas();
+  draw();
+}
+
+function startDrag(e) {
+  if (!state.image) return;
+  interaction.dragging = true;
+  interaction.lastX = e.clientX;
+  interaction.lastY = e.clientY;
+  canvas.classList.add("dragging");
+}
+
+function onDrag(e) {
+  if (!interaction.dragging || !state.image) return;
+
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+
+  const dx = (e.clientX - interaction.lastX) * scaleX;
+  const dy = (e.clientY - interaction.lastY) * scaleY;
+
+  state.offsetX += dx;
+  state.offsetY += dy;
+
+  interaction.lastX = e.clientX;
+  interaction.lastY = e.clientY;
+
+  draw();
+}
+
+function endDrag() {
+  interaction.dragging = false;
+  canvas.classList.remove("dragging");
+}
+
+function onWheel(e) {
+  if (!state.image) return;
+  e.preventDefault();
+
+  const rect = canvas.getBoundingClientRect();
+  const mouseX = (e.clientX - rect.left) * (canvas.width / rect.width);
+  const mouseY = (e.clientY - rect.top) * (canvas.height / rect.height);
+
+  const before = getPlacement();
+  const imageXBefore = (mouseX - before.x) / before.w;
+  const imageYBefore = (mouseY - before.y) / before.h;
+
+  const zoomFactor = e.deltaY < 0 ? 1.08 : 0.92;
+  const newScale = clamp(state.scale * zoomFactor, 0.1, 8);
+
+  state.scale = newScale;
+
+  const after = getPlacement();
+  const newX = mouseX - imageXBefore * after.w;
+  const newY = mouseY - imageYBefore * after.h;
+
+  const centered = getPlacement();
+  state.offsetX += newX - centered.x;
+  state.offsetY += newY - centered.y;
+
+  draw();
+}
+
+function clamp(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
+
+function getPlacement() {
+  const img = state.image;
+  const w = img.width * state.scale;
+  const h = img.height * state.scale;
+  const x = (canvas.width - w) / 2 + state.offsetX;
+  const y = (canvas.height - h) / 2 + state.offsetY;
+  return { x, y, w, h };
+}
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  if (!state.image) {
+    drawPlaceholder();
+    return;
+  }
+
+  drawInsideToken();
+  drawFrame();
+  drawBreakout();
+}
+
+function drawInsideToken() {
+  const { x, y, w, h } = getPlacement();
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(TOKEN.cx, TOKEN.cy, TOKEN.radius, 0, Math.PI * 2);
+  ctx.closePath();
+  ctx.clip();
+  ctx.drawImage(state.image, x, y, w, h);
+  ctx.restore();
+}
+
+function drawFrame() {
+  if (tokenFrame.complete && tokenFrame.naturalWidth > 0) {
+    ctx.drawImage(tokenFrame, TOKEN_X, TOKEN_Y, TOKEN_SIZE, TOKEN_SIZE);
+  } else {
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(TOKEN.cx, TOKEN.cy, TOKEN.radius, 0, Math.PI * 2);
+    ctx.lineWidth = 18;
+    ctx.strokeStyle = "#222";
+    ctx.stroke();
+    ctx.restore();
+  }
+}
+
+function drawBreakout() {
+  const { x, y, w, h } = getPlacement();
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(0, 0, canvas.width, state.breakoutY);
+  ctx.closePath();
+  ctx.clip();
+  ctx.drawImage(state.image, x, y, w, h);
+  ctx.restore();
+}
+
+function downloadPNG() {
+  try {
+    const url = canvas.toDataURL("image/png");
+    const link = document.createElement("a");
+    link.download = "token.png";
+    link.href = url;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  } catch (err) {
+    console.error("Export failed:", err);
+    alert("Download failed. Make sure you are running this through a local server.");
+  }
+}
+</script>
+</body>
+</html>
