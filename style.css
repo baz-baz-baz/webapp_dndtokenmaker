@@ -1,0 +1,251 @@
+/* Optional: only works if you provide the font file */
+@font-face {
+  font-family: "ScalaSans Caps";
+  src: url("./fonts/Scaly Sans Caps Bold Italic.otf") format("opentype");
+  font-weight: bold;
+  font-style: italic;
+}
+
+:root {
+  --bg: #FDF1DC;
+  --panel: #f8e8cd;
+  --panel-2: #f3dfbe;
+  --text: #000000;
+  --muted: #4a342c;
+  --header: #58180D;
+  --accent: #7a2a18;
+  --border: #d7b98f;
+  --shadow: 0 10px 24px rgba(88, 24, 13, 0.10);
+
+  /* Fonts */
+  --font-body: "ScalaSans Caps", "Bookmania", Georgia, serif;
+  --font-header: "ScalaSans Caps", "Bookmania", Georgia, serif;
+  --font-title: "Bookmania", Georgia, serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+}
+
+.page {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 32px 20px 48px;
+}
+
+.header {
+  margin-bottom: 24px;
+}
+
+/* Title uses Bookmania ONLY */
+.title {
+  margin: 0 0 8px;
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--header);
+  font-family: var(--font-title);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+}
+
+.controls {
+  padding: 20px;
+  display: grid;
+  gap: 14px;
+}
+
+/* Everything except title uses ScalaSans */
+.section-title,
+.preview-title,
+.file-label,
+button {
+  font-family: var(--font-header);
+  font-weight: bold;
+  font-style: italic;
+  color: var(--header);
+}
+
+.section-title,
+.preview-title {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.file-label {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.hint,
+.preview-note,
+.footer-help {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--text);
+}
+
+.file-wrap,
+.control-group,
+.buttons {
+  display: grid;
+  gap: 10px;
+}
+
+.buttons {
+  gap: 8px;
+}
+
+input[type="file"] {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: #fff8ee;
+  color: var(--text);
+  font-family: var(--font-body);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.value-pill {
+  min-width: 56px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  text-align: center;
+  background: #fff8ee;
+  border: 1px solid var(--border);
+  color: var(--header);
+  font-size: 0.85rem;
+  font-family: var(--font-body);
+}
+
+input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+button {
+  appearance: none;
+  border: none;
+  border-radius: 14px;
+  padding: 12px 14px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: transform 0.08s ease, background 0.2s ease, opacity 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+}
+
+.primary {
+  background: var(--header);
+  color: #FDF1DC;
+}
+
+.secondary {
+  background: #fff8ee;
+  color: var(--header);
+  border: 1px solid var(--border);
+}
+
+.status {
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff8ee;
+  color: var(--text);
+  font-size: 0.92rem;
+  line-height: 1.4;
+  font-family: var(--font-body);
+}
+
+.preview-panel {
+  padding: 20px;
+  display: grid;
+  gap: 14px;
+}
+
+.preview-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.canvas-wrap {
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  background:
+    linear-gradient(45deg, #ead6b4 25%, transparent 25%),
+    linear-gradient(-45deg, #ead6b4 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #ead6b4 75%),
+    linear-gradient(-45deg, transparent 75%, #ead6b4 75%);
+  background-size: 24px 24px;
+  background-position: 0 0, 0 12px, 12px -12px, -12px 0;
+  padding: 18px;
+  border: 1px solid var(--border);
+}
+
+canvas {
+  display: block;
+  width: 300px;
+  height: 300px;
+  background: transparent;
+  border-radius: 14px;
+  cursor: grab;
+}
+
+canvas.dragging {
+  cursor: grabbing;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .page {
+    padding: 20px 14px 32px;
+  }
+}

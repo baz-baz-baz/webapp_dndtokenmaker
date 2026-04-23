@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D&D Token Maker</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="page">
+    <div class="header">
+      <h1 class="title">D&amp;D Token Maker</h1>
+    </div>
+
+    <div class="layout">
+      <aside class="panel controls">
+
+        <div class="file-wrap">
+          <span class="file-label">Image</span>
+          <input type="file" id="fileInput" accept="image/*">
+        </div>
+
+        <div class="control-group">
+          <div class="row">
+            <label class="file-label" for="breakoutY">Breakout Limit</label>
+            <div class="value-pill" id="breakoutValue">95px</div>
+          </div>
+          <input type="range" id="breakoutY" min="0" max="180" step="1" value="95">
+        </div>
+
+        <div class="buttons">
+          <button id="removeBgBtn" class="secondary" type="button">Remove Background</button>
+          <button id="restoreBtn" class="secondary" type="button">Restore Original</button>
+          <button id="resetBtn" class="secondary" type="button">Reset Position</button>
+          <button id="downloadBtn" class="primary" type="button">Download PNG</button>
+        </div>
+
+        <div id="status" class="status" aria-live="polite">No Image</div>
+
+      </aside>
+
+      <section class="panel preview-panel">
+        <div class="preview-top">
+          <h2 class="preview-title">Preview</h2>
+        </div>
+
+        <div class="canvas-wrap">
+          <canvas id="canvas" width="300" height="300"></canvas>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
